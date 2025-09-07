@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AniVMarket - Магазин аниме товаров</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #1a1a2e;
+            color: #e6e6e6;
+            line-height: 1.6;
+            background-image: linear-gradient(to bottom, #1a1a2e, #16213e);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header styles */
+        header {
+            background-color: #0f3460;
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #e94560;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        .logo span {
+            color: #4cc9f0;
+        }
+        
+        .search-bar {
+            flex-grow: 1;
+            margin: 0 20px;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .user-actions a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+            transition: color 0.3s;
+        }
+        
+        .user-actions a:hover {
+            color: #4cc9f0;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            background-color: #16213e;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        nav ul li {
+            padding: 10px 15px;
+            transition: background-color 0.3s;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+        
+        nav ul li:hover {
+            background-color: #e94560;
+        }
+        
+        /* Main content */
+        .main-content {
+            display: flex;
+            margin: 20px 0;
+        }
+        
+        .categories {
+            flex: 0 0 250px;
+            background: rgba(15, 52, 96, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            margin-right: 20px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .categories h3 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e94560;
+            color: #4cc9f0;
+        }
+        
+        .categories ul {
+            list-style: none;
+        }
+        
+        .categories ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .categories ul li a {
+            color: #e6e6e6;
+            text-decoration: none;
+            display: flex;
+            justify-content: space-between;
+            transition: color 0.3s;
+        }
+        
+        .categories ul li a:hover {
+            color: #4cc9f0;
+        }
+        
+        .products {
+            flex-grow: 1;
+        }
+        
+        .section-title {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-title h2 {
+            color: #4cc9f0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .view-all {
+            color: #e94560;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .view-all:hover {
+            text-decoration: underline;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-card {
+            background: rgba(15, 52, 96, 0.7);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .product-image {
+            height: 180px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        .product-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        
+        .product-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e94560;
+            margin-bottom: 10px;
+        }
+        
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #8f9bb3;
+            font-size: 14px;
+        }
+        
+        /* Banner */
+        .banner {
+            background: linear-gradient(to right, #e94560, #0f3460);
+            border-radius: 8px;
+            padding: 30px;
+            color: white;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .banner h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .banner p {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #4cc9f0;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:hover {
+            background: #2b9cbf;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Footer */
+        footer {
+            background: #0f3460;
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 40px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 20px;
+            color: #4cc9f0;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: #e94560;
+            text-decoration: underline;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+        
+        .social-icons a:hover {
+            color: #4cc9f0;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #34495e;
+            color: #8f9bb3;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+            }
+            
+            .search-bar {
+                margin: 15px 0;
+                width: 100%;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .categories {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        /* Аниме-акценты */
+        .anime-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e94560;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .discount {
+            background: #4cc9f0;
+        }
+
+        .new {
+            background: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-top">
+                <div class="logo">Ani<span>V</span>Market</div>
+                <div class="search-bar">
+                    <input type="text" placeholder="Поиск аниме товаров...">
+                </div>
+                <div class="user-actions">
+                    <a href="#"><i class="fas fa-plus"></i> Добавить товар</a>
+                    <a href="#"><i class="fas fa-user"></i> Войти</a>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">Главная</a></li>
+                    <li><a href="#">Фигурки</a></li>
+                    <li><a href="#">Одежда</a></li>
+                    <li><a href="#">Аксессуары</a></li>
+                    <li><a href="#">Манга</a></li>
+                    <li><a href="#">Коллекционные</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Categories -->
+            <div class="categories">
+                <h3>Категории</h3>
+                <ul>
+                    <li><a href="#">Фигурки и статуэтки <span>></span></a></li>
+                    <li><a href="#">Косплей костюмы <span>></span></a></li>
+                    <li><a href="#">Манга и артбуки <span>></span></a></li>
+                    <li><a href="#">Одежда с аниме принтами <span>></span></a></li>
+                    <li><a href="#">Аксессуары <span>></span></a></li>
+                    <li><a href="#">Коллекционные предметы <span>></span></a></li>
+                    <li><a href="#">Постеры и арт <span>></span></a></li>
+                    <li><a href="#">Комиксы <span>></span></a></li>
+                    <li><a href="#">Игры и пазлы <span>></span></a></li>
+                    <li><a href="#">Брелоки и ключницы <span>></span></a></li>
+                    <li><a href="#">Канцелярия <span>></span></a></li>
+                    <li><a href="#">Домашний декор <span>></span></a></li>
+                </ul>
+            </div>
+
+            <!-- Products -->
+            <div class="products">
+                <div class="section-title">
+                    <h2>Популярные товары</h2>
+                    <a href="#" class="view-all">Смотреть все</a>
+                </div>
+
+                <div class="product-grid">
+                    <!-- Product 1 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/300x200/0f3460/ffffff?text=Фигурка+Наруто" alt="Фигурка Наруто">
+                            <div class="anime-badge new">NEW</div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Фигурка Наруто</h3>
+                            <div class="product-price">4 500 руб.</div>
+                            <div class="product-meta">
+                                <span><i class="fas fa-map-marker-alt"></i> Москва</span>
+                                <span><i class="far fa-clock"></i> 2 часа назад</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 2 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/300x200/e94560/ffffff?text=Косплей+Акемы" alt="Косплей Акемы">
+                            <div class="anime-badge discount">-15%</div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Косплей костюм Акемы</h3>
+                            <div class="product-price">8 900 руб.</div>
+                            <div class="product-meta">
+                                <span><i class="fas fa-map-marker-alt"></i> Санкт-Петербург</span>
+                                <span><i class="far fa-clock"></i> 5 часов назад</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 3 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/300x200/4cc9f0/ffffff?text=Манга+Токийский+Гуль" alt="Манга Токийский Гуль">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Манга Токийский Гуль (1-14 тома)</h3>
+                            <div class="product-price">12 000 руб.</div>
+                            <div class="product-meta">
+                                <span><i class="fas fa-map-marker-alt"></i> Казань</span>
+                                <span><i class="far fa-clock"></i> Вчера</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 4 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/300x200/2ecc71/ffffff?text=Футболка+Attack+on+Titan" alt="Футболка Attack on Titan">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Футболка Attack on Titan</h3>
+                            <div class="product-price">2 200 руб.</div>
+                            <div class="product-meta">
+                                <span><i class="fas fa-map-marker-alt"></i> Екатеринбург</span>
+                                <span><i class="far fa-clock"></i> 2 дня назад</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 5 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/300x200/9b59b6/ffffff?text=Кольцо+Сатипы" alt="Кольцо Сатипы">
+                            <div class="anime-badge new">NEW</div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Кольцо Сатипы (Jujutsu Kaisen)</h3>
+                            <div class="product-price">1 800 руб.</div>
+                            <div class="product-meta">
+                                <span><i class="fas fa-map-marker-alt"></i> Новосибирск</span>
+                                <span><i class="far fa-clock"></i> 3 дня назад</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 6 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/300x200/f39c12/ffffff?text=Постер+One+Piece" alt="Постер One Piece">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Постер One Piece (60x90см)</h3>
+                            <div class="product-price">900 руб.</div>
+                            <div class="product-meta">
+                                <span><i class="fas fa-map-marker-alt"></i> Ростов-на-Дону</span>
+                                <span><i class="far fa-clock"></i> Сегодня</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Banner -->
+                <div class="banner">
+                    <h2>Продавайте на AniVMarket!</h2>
+                    <p>Размещайте свои аниме товары бесплатно и находите единомышленников</p>
+                    <a href="#" class="btn">Разместить товар</a>
+                </div>
+
+                <div class="section-title">
+                    <h2>Популярные категории</h2>
+                </div>
+
+                <div class="product-grid">
+                    <!-- Category 1 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/300x200/0f3460/ffffff?text=Фигурки" alt="Фигурки">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Фигурки</h3>
+                            <div class="product-meta">
+                                <span>1 432 товара</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 2 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/300x200/e94560/ffffff?text=Косплей" alt="Косплей">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Косплей</h3>
+                            <div class="product-meta">
+                                <span>876 товаров</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 3 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/300x200/4cc9f0/ffffff?text=Манга" alt="Манга">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Манга</h3>
+                            <div class="product-meta">
+                                <span>2 145 товаров</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 4 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/300x200/2ecc71/ffffff?text=Одежда" alt="Одежда">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Одежда</h3>
+                            <div class="product-meta">
+                                <span>3 543 товара</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AniVMarket</h3>
+                    <p>Лучшая площадка для покупки и продажи аниме товаров по всей России</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-vk"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Покупателям</h3>
+                    <ul>
+                        <li><a href="#">Как купить</a></li>
+                        <li><a href="#">Безопасность</a></li>
+                        <li><a href="#">Правила</a></li>
+                        <li><a href="#">Помощь</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Продавцам</h3>
+                    <ul>
+                        <li><a href="#">Как продавать</a></li>
+                        <li><a href="#">Партнерская программа</a></li>
+                        <li><a href="#">Реклама на сайте</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>О компании</h3>
+                    <ul>
+                        <li><a href="#">О нас</a></li>
+                        <li><a href="#">Контакты</a></li>
+                        <li><a href="#">Вакансии</a></li>
+                        <li><a href="#">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 AniVMarket - Все права защищены</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
